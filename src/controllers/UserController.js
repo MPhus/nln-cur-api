@@ -180,6 +180,30 @@ const updateDetail = async (req, res, next) => {
 		next(err)
 	}
 }
+const updateDetailPassword = async (req, res, next) => {
+	try {
+		const web = await webModel.getDetail(req.params.slug)
+		const user = await userService.checkValidEmail(web._id.toString(), req.body.email)
+		if (req.body.oldPassword !== 'changeRole') {
+			const isPasswordValid = await bcrypt.compare(req.body.oldPassword, user.password)
+			if (!user || !isPasswordValid) {
+				res.status(StatusCodes.FORBIDDEN).json({ message: 'Mật khẩu không hợp lệ' })
+				return
+			}
+		}
+		const data = {
+			...req.body,
+		}
+		delete data.oldPassword
+		const userDetailUpdated = await userService.updateDetailPasswork(data, user.password)
+		if (!userDetailUpdated) throw new ApiError(StatusCodes.NOT_FOUND, 'User not found!')
+
+		res.status(StatusCodes.CREATED).json(userDetailUpdated)
+	}
+	catch (err) {
+		next(err)
+	}
+}
 const deleteUser = async (req, res) => {
 	try {
 		const { id } = req.query
@@ -204,4 +228,5 @@ export const userController = {
 	updateDetail,
 	deleteUser,
 	getUserById,
+	updateDetailPassword
 }

@@ -90,11 +90,41 @@ const updateDetail = async (data) => {
 		throw error
 	}
 }
+const updateDetailPasswork = async (data, passOnDB) => {
+	try {
+		let hashedPassword
+		if (passOnDB === data.password) {
+			hashedPassword = passOnDB
+		} else {
+			hashedPassword = await bcrypt.hash(data.password, 10)
+		}
+		let userDetail = {
+			...data,
+			isAdmin: JSON.parse(data.isAdmin),
+			password: hashedPassword
+		}
+		if (!data.password) {
+			const user = await userModel.getUserById(data.webId, data._id)
+			userDetail = {
+				...data,
+				isAdmin: JSON.parse(data.isAdmin),
+				password: user.password
+			}
+		}
+		const resuil = await userModel.updateDetail(userDetail)
+
+		return resuil
+
+	} catch (error) {
+		throw error
+	}
+}
 export const userService = {
 	checkValidEmail,
 	getAllUser,
 	createNew,
 	getUserById,
 	deleteUser,
-	updateDetail
+	updateDetail,
+	updateDetailPasswork
 }

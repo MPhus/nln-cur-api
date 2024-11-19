@@ -212,7 +212,7 @@ const getPaymentPage = async (req, res, next) => {
 			amount: (dataSaveDatabase.totalPrice + dataSaveDatabase.tranportFee) * 1000,
 			description: `TiemCUR_Payment for the order #${transID}`,
 			bank_code: '',
-			callback_url: 'https://49fa-2402-800-6343-ec8-35b5-2ecb-6da0-e9d3.ngrok-free.app/v1/web/tiemcur/order/zaloCallback'
+			callback_url: 'https://b4df-2402-800-6343-34d1-ec61-4205-5ad1-4792.ngrok-free.app/v1/web/tiemcur/order/zaloCallback'
 		};
 		const data = order.app_id + '|' + order.app_trans_id + '|' + order.app_user + '|' + order.amount + '|' + order.app_time + '|' + order.embed_data + '|' + order.item;
 		order.mac = CryptoJS.HmacSHA256(data, ZALOPAY_CONFIG.key1).toString()
@@ -261,6 +261,7 @@ const zaloCallback = async (req, res) => {
 		result.returncode = 0
 		result.returnmessage = ex.message
 	}
+	console.log('result: ', result)
 	res.json(result)
 
 }

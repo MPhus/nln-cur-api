@@ -14,7 +14,7 @@ const createNew = async (req, res, next) => {
 
 		payMethod: Joi.string().valid(PAY_METHOD.ZALOPAY, PAY_METHOD.CASH).required(),
 
-		note: Joi.string(),
+		note: Joi.string().allow(''),
 		phone: Joi.string(),
 		ward: Joi.string().required().max(128).trim(),
 

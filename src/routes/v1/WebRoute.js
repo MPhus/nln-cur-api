@@ -28,7 +28,7 @@ Router.route('/:slug/users/login')
 Router.route('/:slug/users')
 	.get(userController.getAllUser)
 	.post(userController.createNew)
-	.put(userController.updateDetail)
+	.put(userController.updateDetailPassword)
 	.delete(userController.deleteUser)
 
 Router.route('/:slug/users/:id')
